@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAxios } from '../hooks/useAxios'
 import { useNavigate } from 'react-router-dom'
-import { TailSpin, Triangle } from 'react-loader-spinner'
+import { TailSpin } from 'react-loader-spinner'
 
 interface Product {
   id: number
@@ -65,7 +65,7 @@ const Products = () => {
 
   if (isLoading) {
     return (
-      <div className='flex items-center justify-center mt-10'>
+      <div className="flex items-center justify-center mt-10">
         <TailSpin
           visible={true}
           height="80"
