@@ -1,42 +1,54 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { useAxios } from '../hooks/useAxios';
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useAxios } from '../hooks/useAxios'
+import { TailSpin } from 'react-loader-spinner'
 
 interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  images: string;
-  createdAt: string;
-  updatedAt: string;
-  category: string;
+  id: string
+  name: string
+  description: string
+  price: number
+  images: string
+  createdAt: string
+  updatedAt: string
+  category: string
 }
 
 const AboutProducts: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const [aboutProduct, setAboutProduct] = useState<Product | null>(null);
-  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>()
+  const [aboutProduct, setAboutProduct] = useState<Product | null>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await useAxios().get(`products/${id}`);
-        setAboutProduct(response.data);
+        const response = await useAxios().get(`products/${id}`)
+        setAboutProduct(response.data)
       } catch (error) {
-        console.error('Failed to fetch product', error);
+        console.error('Failed to fetch product', error)
       }
-    };
+    }
 
-    fetchProduct();
-  }, [id]);
+    fetchProduct()
+  }, [id])
 
   if (!aboutProduct) {
     return (
       <div className="text-center text-xl font-semibold mt-20">
-        Loading product details...
+        <div className="flex items-center justify-center mt-10">
+          <TailSpin
+            visible={true}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+        </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -53,8 +65,8 @@ const AboutProducts: React.FC = () => {
               src={aboutProduct.images}
               alt={aboutProduct.name}
               onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  'https://via.placeholder.com/300';
+                ;(e.target as HTMLImageElement).src =
+                  'https://via.placeholder.com/300'
               }}
             />
           </div>
@@ -71,7 +83,7 @@ const AboutProducts: React.FC = () => {
 
             <div className="mt-6 flex justify-between items-center">
               <span className="text-3xl font-bold text-green-500">
-              Price :  ${aboutProduct.price}
+                Price : ${aboutProduct.price}
               </span>
               <button
                 onClick={() => navigate(-1)}
@@ -84,7 +96,7 @@ const AboutProducts: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AboutProducts;
+export default AboutProducts

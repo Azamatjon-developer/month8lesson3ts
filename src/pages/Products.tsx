@@ -1,28 +1,31 @@
-import { useState, useEffect } from 'react';
-import { useAxios } from '../hooks/useAxios';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react'
+import { useAxios } from '../hooks/useAxios'
+import { useNavigate } from 'react-router-dom'
+import { TailSpin, Triangle } from 'react-loader-spinner'
 
 interface Product {
-  id: number;
-  title: string;
-  price: number;
-  updatedAt: string;
-  images: string[];
+  id: number
+  title: string
+  price: number
+  updatedAt: string
+  images: string[]
 }
 
 const Products = () => {
-  const [products, setProducts] = useState<Product[] | null>(null);
-  const axios = useAxios();
-  const navigate = useNavigate();
+  const [products, setProducts] = useState<Product[] | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const axios = useAxios()
+  const navigate = useNavigate()
 
   useEffect(() => {
     axios
       .get('products')
       .then((res) => {
-        setProducts(res.data);
+        setProducts(res.data)
+        setIsLoading(false)
       })
-      .catch((err) => console.log(err));
-  }, [axios]);
+      .catch((err) => console.log(err))
+  }, [axios])
 
   let productsItem = products?.map((product: Product) => (
     <div
@@ -33,9 +36,9 @@ const Products = () => {
         src={product.images[0]}
         alt={product.title}
         onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-          const target = e.target as HTMLImageElement;
-          target.onerror = null;
-          target.src = 'https://placehold.co/600x400?text=Not+Found';
+          const target = e.target as HTMLImageElement
+          target.onerror = null
+          target.src = 'https://placehold.co/600x400?text=Not+Found'
         }}
         className="w-full h-64 object-cover rounded-t-xl"
       />
@@ -58,7 +61,24 @@ const Products = () => {
         </button>
       </div>
     </div>
-  ));
+  ))
+
+  if (isLoading) {
+    return (
+      <div className='flex items-center justify-center mt-10'>
+        <TailSpin
+          visible={true}
+          height="80"
+          width="80"
+          color="#4fa94d"
+          ariaLabel="tail-spin-loading"
+          radius="1"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-10">
@@ -67,7 +87,7 @@ const Products = () => {
         {productsItem}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Products;
+export default Products
